@@ -385,7 +385,7 @@ HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
 
 HOSTCC       = clang
 HOSTCXX      = clang++
-HOSTCFLAGS   := -Wall -Wmissing-prototypes -O2 \
+HOSTCFLAGS   := -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 \
 		-fomit-frame-pointer -std=gnu89 $(HOST_LFS_CFLAGS)
 HOSTCXXFLAGS := -O2 $(HOST_LFS_CFLAGS)
 HOSTLDFLAGS  := $(HOST_LFS_LDFLAGS)
@@ -465,9 +465,9 @@ endif
 endif
 
 KBUILD_AFLAGS   := -D__ASSEMBLY__
-KBUILD_CFLAGS   := -Wall -Wundef -Wno-trigraphs \
+KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common -fshort-wchar \
-		   # -Werror-implicit-function-declaration \
+		   -Werror-implicit-function-declaration \
 		   -Wno-format-security \
 		   -std=gnu89
 KBUILD_CPPFLAGS := -D__KERNEL__
@@ -691,16 +691,16 @@ export CFLAGS_GCOV CFLAGS_KCOV
 # Make toolchain changes before including arch/$(SRCARCH)/Makefile to ensure
 # ar/cc/ld-* macros return correct values.
 ifdef CONFIG_LTO_CLANG
-LD_LIBRARY_PATH := $(CLANG_PREBUILTS_PATH)lib64/
+# LD_LIBRARY_PATH := $(CROSS_COMPILE)/../lib64/
 
 # use GNU gold with LLVMgold for LTO linking, and LD for vmlinux_link
 LDFINAL_vmlinux := $(LD)
 LD		:= $(LDGOLD)
-LDFLAGS		+= -plugin $(LD_LIBRARY_PATH)LLVMgold.so
+LDFLAGS		+= -plugin LLVMgold.so
 # use llvm-ar for building symbol tables from IR files, and llvm-dis instead
 # of objdump for processing symbol versions and exports
-LLVM_AR		:= llvm-ar
-LLVM_DIS	:= llvm-dis
+LLVM_AR		:= $(CLANG_PREBUILT_BIN)llvm-ar
+LLVM_DIS	:= $(CLANG_PREBUILT_BIN)llvm-dis
 export LLVM_AR LLVM_DIS
 endif
 
