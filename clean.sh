@@ -5,7 +5,12 @@ echo "开始清理编译残留..."
 start_time_sum=$(date +%s)
 
 rm -rf out
-make ARCH=arm64 distclean
+export PATH=$PATH:$(pwd)/../Compiler/Proton-Clang/bin
+export CC=clang
+export CLANG_TRIPLE=aarch64-linux-gnu-
+export CROSS_COMPILE=aarch64-linux-gnu-
+export CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+make ARCH=arm64 CC=clang distclean
 
 end_time_sum=$(date +%s)
 
