@@ -5,7 +5,7 @@
 export PATH=$PATH:$(pwd)/../Compiler/Google/GCC32/bin:$(pwd)/../Compiler/Google/GCC64/bin:$(pwd)/../Compiler/Google/Clang/clang-r346389c/bin
 # export CLANG_PREBUILTS_PATH=$(pwd)/../Compiler/Google/Clang/clang-r346389c/
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/../Compiler/Google/Clang/clang-r346389c/lib64/
-export CC="ccache clang"
+export CC="clang"
 export CLANG_TRIPLE=aarch64-linux-android-
 export CROSS_COMPILE=aarch64-linux-android-
 export CROSS_COMPILE_ARM32=arm-linux-androideabi-
@@ -23,9 +23,9 @@ start_time=$(date +%Y.%m.%d-%I_%M)
 
 start_time_sum=$(date +%s)
 
-make ARCH=arm64 O=out CC="ccache clang" merge_kirin970_mod_defconfig
+make ARCH=arm64 O=out CC="clang" merge_kirin970_mod_defconfig
 # 定义编译线程数
-make ARCH=arm64 O=out CC="ccache clang" -j$(nproc --all) 2>&1 | tee kernel_log-${start_time}.txt
+make ARCH=arm64 O=out CC="clang" -j$(nproc --all) 2>&1 | tee kernel_log-${start_time}.txt
 
 end_time_sum=$(date +%s)
 
