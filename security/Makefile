@@ -25,5 +25,6 @@ obj-$(CONFIG_SECURITY_APPARMOR)		+= apparmor/
 obj-$(CONFIG_SECURITY_YAMA)		+= yama/
 
 # HW Object
+obj-$(CONFIG_HUAWEI_SOP)		+= sop/
 include security/kernel_harden/Makefile
 
