@@ -2,10 +2,13 @@
 #设置环境
 
 # 交叉编译器路径
-export PATH=$PATH:$(pwd)/../Compiler/Google/GCC32/bin:$(pwd)/../Compiler/Google/GCC64/bin:$(pwd)/../Compiler/Google/Clang/clang-r346389c/bin
+export PATH=$PATH:$(pwd)/../Compiler/Google/GCC32/bin:$(pwd)/../Compiler/Google/GCC64/bin
+
+# Please find it in Makefile
+# 这两个参数请在Makefile里寻找并更改
 # export CLANG_PREBUILTS_PATH=$(pwd)/../Compiler/Google/Clang/clang-r346389c/
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/../Compiler/Google/Clang/clang-r346389c/lib64/
-export CC="clang"
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/../Compiler/Google/Clang/clang-r346389c/lib64/ 
+# export 
 export CLANG_TRIPLE=aarch64-linux-android-
 export CROSS_COMPILE=aarch64-linux-android-
 export CROSS_COMPILE_ARM32=arm-linux-androideabi-
@@ -23,9 +26,9 @@ start_time=$(date +%Y.%m.%d-%I_%M)
 
 start_time_sum=$(date +%s)
 
-make ARCH=arm64 O=out CC="clang" merge_kirin970_mod_defconfig
+make ARCH=arm64 O=out merge_kirin970_mod_defconfig
 # 定义编译线程数
-make ARCH=arm64 O=out CC="clang" -j$(nproc --all) 2>&1 | tee kernel_log-${start_time}.txt
+make ARCH=arm64 O=out -j$(nproc --all) 2>&1 | tee kernel_log-${start_time}.txt
 
 end_time_sum=$(date +%s)
 
