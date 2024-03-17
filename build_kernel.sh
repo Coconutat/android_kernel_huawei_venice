@@ -2,9 +2,10 @@
 #设置环境
 
 # 交叉编译器路径
-export PATH=$PATH:$(pwd)/../Compiler/android-ndk-r20b/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin:$(pwd)/../Compiler/android-ndk-r20b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin:$(pwd)/../Compiler/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/bin
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/../Compiler/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/
-export CC=clang
+export PATH=$PATH:$(pwd)/../Compiler/Google/GCC32/bin:$(pwd)/../Compiler/Google/GCC64/bin:$(pwd)/../Compiler/Google/Clang/clang-r346389c/bin
+# export CLANG_PREBUILTS_PATH=$(pwd)/../Compiler/Google/Clang/clang-r346389c/
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/../Compiler/Google/Clang/clang-r346389c/lib64/
+export CC="ccache clang"
 export CLANG_TRIPLE=aarch64-linux-android-
 export CROSS_COMPILE=aarch64-linux-android-
 export CROSS_COMPILE_ARM32=arm-linux-androideabi-
@@ -22,9 +23,9 @@ start_time=$(date +%Y.%m.%d-%I_%M)
 
 start_time_sum=$(date +%s)
 
-make ARCH=arm64 O=out CC=clang merge_kirin970_mod_defconfig
+make ARCH=arm64 O=out CC="ccache clang" merge_kirin970_mod_defconfig
 # 定义编译线程数
-make ARCH=arm64 O=out CC=clang -j$(nproc --all) 2>&1 | tee kernel_log-${start_time}.txt
+make ARCH=arm64 O=out CC="ccache clang" -j$(nproc --all) 2>&1 | tee kernel_log-${start_time}.txt
 
 end_time_sum=$(date +%s)
 
@@ -44,6 +45,9 @@ echo "脚本运行时间为：${hours}小时 ${minutes}分钟 ${seconds}秒"
 if [ -f out/arch/arm64/boot/Image.gz ]; then
 
 	echo "***Sucessfully built kernel...***"
+	cp out/arch/arm64/boot/Image.gz Image.gz
+	cp out/crypto/crypto_engine.ko crypto_engine.ko
+	cp out/drivers/crypto/virtio/virtio_crypto.ko virtio_crypto.ko
 	./tools/mkbootimg --kernel out/arch/arm64/boot/Image.gz --base 0x0 --cmdline "loglevel=4 page_tracker=on unmovable_isolate1=2:192M,3:224M,4:256M printktimer=0xfff0a000,0x534,0x538 androidboot.selinux=enforcing buildvariant=user" --tags_offset 0x37E00000 --kernel_offset 0x00080000 --ramdisk_offset 0x37600000 --header_version 1 --os_version 10 --os_patch_level 2020-01-01  --output Nova_4_kernel.img
 	./tools/mkbootimg --kernel out/arch/arm64/boot/Image.gz --base 0x0 --cmdline "loglevel=4 page_tracker=on unmovable_isolate1=2:192M,3:224M,4:256M printktimer=0xfff0a000,0x534,0x538 androidboot.selinux=permissive buildvariant=user" --tags_offset 0x37E00000 --kernel_offset 0x00080000 --ramdisk_offset 0x37600000 --header_version 1 --os_version 10 --os_patch_level 2020-01-01  --output Nova_4_PM_kernel.img
 	echo " "
