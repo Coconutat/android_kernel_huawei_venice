@@ -5,14 +5,20 @@ echo "开始清理编译残留..."
 start_time_sum=$(date +%s)
 
 rm -rf out
-export PATH=$PATH:$(pwd)/../Compiler/Google/GCC32/bin:$(pwd)/../Compiler/Google/GCC64/bin:$(pwd)/../Compiler/Google/Clang/clang-r346389c/bin
+
+# 交叉编译器路径
+export PATH=$PATH:$(pwd)/../Compiler/Google/GCC64/bin
+
+# Find those flag in Makefile!!!
+# 这两个标记请在Makefile内寻找！！！
 export CLANG_PREBUILTS_PATH=$(pwd)/../Compiler/Google/Clang/clang-r346389c/
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/../Compiler/Google/Clang/clang-r346389c/lib64/
-export CC="ccache clang"
-export CLANG_TRIPLE=aarch64-linux-android-
 export CROSS_COMPILE=aarch64-linux-android-
-export CROSS_COMPILE_ARM32=arm-linux-androideabi-
-make ARCH=arm64 CC=clang distclean
+export ARCH=arm64
+export SUBARCH=arm64
+# export DTC_EXT=dtc
+
+make ARCH=arm64 distclean
 
 end_time_sum=$(date +%s)
 

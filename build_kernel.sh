@@ -2,15 +2,13 @@
 #设置环境
 
 # 交叉编译器路径
-export PATH=$PATH:$(pwd)/../Compiler/Google/GCC32/bin:$(pwd)/../Compiler/Google/GCC64/bin:$(pwd)/../Compiler/Google/Clang/clang-r346389c/bin
-# export CLANG_PREBUILTS_PATH=$(pwd)/../Compiler/Google/Clang/clang-r346389c/
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/../Compiler/Google/Clang/clang-r346389c/lib64/
-export CC="ccache clang"
-export CLANG_TRIPLE=aarch64-linux-android-
-export CROSS_COMPILE=aarch64-linux-android-
-export CROSS_COMPILE_ARM32=arm-linux-androideabi-
-# export CONFIG_BUILD_ARM64_DT_OVERLAY=y
+export PATH=$PATH:$(pwd)/../Compiler/Google/GCC64/bin
 
+# Find those flag in Makefile!!!
+# 这两个标记请在Makefile内寻找！！！
+export CLANG_PREBUILTS_PATH=$(pwd)/../Compiler/Google/Clang/clang-r346389c/
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/../Compiler/Google/Clang/clang-r346389c/lib64/
+export CROSS_COMPILE=aarch64-linux-android-
 export ARCH=arm64
 export SUBARCH=arm64
 # export DTC_EXT=dtc
@@ -23,9 +21,9 @@ start_time=$(date +%Y.%m.%d-%I_%M)
 
 start_time_sum=$(date +%s)
 
-make ARCH=arm64 O=out CC="ccache clang" merge_kirin970_mod_defconfig
+make ARCH=arm64 O=out merge_kirin970_mod_defconfig
 # 定义编译线程数
-make ARCH=arm64 O=out CC="ccache clang" -j$(nproc --all) 2>&1 | tee kernel_log-${start_time}.txt
+make ARCH=arm64 O=out -j$(nproc --all) 2>&1 | tee kernel_log-${start_time}.txt
 
 end_time_sum=$(date +%s)
 
