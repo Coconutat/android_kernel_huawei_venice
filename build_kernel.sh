@@ -6,8 +6,8 @@ export PATH=$PATH:$(pwd)/../Compiler/Google/GCC32/bin:$(pwd)/../Compiler/Google/
 
 # Please find it in Makefile
 # 这两个参数请在Makefile里寻找并更改
-# export CLANG_PREBUILTS_PATH=$(pwd)/../Compiler/Google/Clang/clang-r346389c/
-# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/../Compiler/Google/Clang/clang-r346389c/lib64/ 
+export CLANG_PREBUILTS_PATH=$(pwd)/../Compiler/Google/Clang/clang-r346389c/
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/../Compiler/Google/Clang/clang-r346389c/lib64/ 
 # export 
 export CLANG_TRIPLE=aarch64-linux-android-
 export CROSS_COMPILE=aarch64-linux-android-
